@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0b1020">
+  <title>Orbit AI — Business Command Centre</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="#" aria-label="Orbit AI home"><span class="brand-mark">✳</span><span>orbit<span class="brand-ai">AI</span></span></a>
+      <div class="workspace-label">WORKSPACE</div>
+      <nav class="nav">
+        <button class="nav-item active" data-page="overview"><span>◫</span> Overview</button>
+        <button class="nav-item" data-page="assistant"><span>✧</span> AI assistant <i class="nav-live"></i></button>
+        <button class="nav-item" data-page="tasks"><span>☷</span> Tasks <b class="nav-count" id="taskNavCount">0</b></button>
+        <button class="nav-item" data-page="customers"><span>♙</span> Customers</button>
+        <button class="nav-item" data-page="notes"><span>▤</span> Notes</button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="storage-status"><span class="green-dot"></span><span>Saved on this device</span></div>
+        <button class="nav-item" data-page="settings"><span>⚙</span> Settings</button>
+        <div class="profile">
+          <div class="avatar">O</div><div><strong>My workspace</strong><small>Personal account</small></div>
+          <button class="more-btn" id="exportBtn" title="Export your data" aria-label="Export your data">⋯</button>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <button class="mobile-menu" id="mobileMenu" aria-label="Toggle menu">☰</button>
+        <div class="breadcrumb"><span>Workspace</span><span class="crumb-slash">/</span><strong id="pageCrumb">Overview</strong></div>
+        <div class="top-actions"><span class="today-label" id="todayLabel"></span><button class="icon-btn" id="quickAddBtn" title="Add a task">＋</button><div class="top-avatar">O</div></div>
+      </header>
+
+      <section class="page active" id="page-overview">
+        <div class="welcome-row"><div><div class="eyebrow">YOUR BUSINESS, IN ONE PLACE</div><h1>Good afternoon<span class="accent">.</span></h1><p class="subheading">Here’s what’s happening in your workspace.</p></div><button class="button primary" data-go="assistant">✧ Ask Orbit</button></div>
+        <div class="stat-grid">
+          <article class="stat-card"><div class="stat-top"><span class="stat-icon violet">☷</span><span class="stat-caption">TASKS IN PROGRESS</span></div><div class="stat-number" id="statActive">0</div><div class="stat-foot"><span class="stat-muted" id="statTaskFoot">No tasks yet</span></div></article>
+          <article class="stat-card"><div class="stat-top"><span class="stat-icon blue">✓</span><span class="stat-caption">TASKS COMPLETED</span></div><div class="stat-number" id="statDone">0</div><div class="stat-foot"><span class="stat-muted">Across this workspace</span></div></article>
+          <article class="stat-card"><div class="stat-top"><span class="stat-icon mint">♙</span><span class="stat-caption">CUSTOMERS</span></div><div class="stat-number" id="statCustomers">0</div><div class="stat-foot"><span class="stat-muted">Saved contacts</span></div></article>
+          <article class="stat-card"><div class="stat-top"><span class="stat-icon amber">◷</span><span class="stat-caption">OPEN PRIORITIES</span></div><div class="stat-number" id="statPriority">0</div><div class="stat-foot"><span class="stat-muted">High-priority tasks</span></div></article>
+        </div>
+        <div class="content-grid">
+          <article class="panel tasks-panel"><div class="panel-heading"><div><div class="eyebrow">STAY ON TRACK</div><h2>Upcoming tasks</h2></div><button class="text-button" data-go="tasks">View all →</button></div><div id="overviewTasks" class="task-list"></div><button class="button secondary full-btn" id="overviewAddTask">＋ Create a task</button></article>
+          <article class="panel assistant-promo"><div class="orb-glow">✳</div><div class="eyebrow">YOUR AI WORK PARTNER</div><h2>Make space for<br><span class="gradient-text">bigger thinking.</span></h2><p>Plan your week, brainstorm ideas, draft customer messages and get practical business guidance.</p><button class="button primary" data-go="assistant">Open AI assistant <span>↗</span></button><div class="promo-foot"><span class="green-dot"></span> Orbit workspace ready</div></article>
+        </div>
+        <article class="panel activity-panel"><div class="panel-heading"><div><div class="eyebrow">WORKSPACE SNAPSHOT</div><h2>Task progress</h2></div><span class="muted" id="progressLabel">0% complete</span></div><div class="progress-track"><div class="progress-fill" id="progressFill"></div></div><div class="progress-legend"><span><i class="legend-dot purple-dot"></i>Completed</span><span><i class="legend-dot grey-dot"></i>Remaining</span></div></article>
+      </section>
+
+      <section class="page" id="page-assistant">
+        <div class="page-intro"><div class="eyebrow">THINK WITH ORBIT</div><h1>Your business assistant<span class="accent">.</span></h1><p class="subheading">Get help planning, writing, organising and thinking through business challenges.</p></div>
+        <div class="chat-layout">
+          <div class="chat-panel panel">
+            <div class="chat-head"><div class="assistant-mini">✳</div><div><strong>Orbit assistant</strong><small><span class="green-dot"></span> Local demo mode</small></div><button class="text-button clear-chat" id="clearChat">Clear chat</button></div>
+            <div class="chat-messages" id="chatMessages"><div class="message assistant-message"><div class="message-avatar">✳</div><div class="bubble"><strong>Hey, welcome to Orbit.</strong><p>I can help you organise work, plan a project, brainstorm business ideas or draft a customer message. What are we working on?</p></div></div></div>
+            <div class="suggestions"><button class="suggestion">Help me plan my week</button><button class="suggestion">Write a customer follow-up</button><button class="suggestion">Give me marketing ideas</button></div>
+            <form class="chat-compose" id="chatForm"><input id="chatInput" autocomplete="off" placeholder="Ask Orbit a question..." aria-label="Message Orbit"><button class="send-btn" aria-label="Send message">↑</button></form>
+            <div class="demo-disclaimer">Demo assistant · Responses are generated locally, not by an AI model yet.</div>
+          </div>
+          <aside class="prompt-card panel"><div class="eyebrow">TRY ASKING</div><h3>Get your ideas moving.</h3><p>Choose a prompt to start a conversation.</p><button class="prompt-option" data-prompt="Help me create a simple business plan for a new small business.">✧ <span><b>Create a business plan</b><small>Turn an idea into a starting plan</small></span> ↗</button><button class="prompt-option" data-prompt="Give me five affordable marketing ideas for a small local business.">◈ <span><b>Find marketing ideas</b><small>Reach more potential customers</small></span> ↗</button><button class="prompt-option" data-prompt="Help me prioritise these tasks and suggest what I should do first.">☷ <span><b>Prioritise my workload</b><small>Focus on what matters most</small></span> ↗</button></aside>
+        </div>
+      </section>
+
+      <section class="page" id="page-tasks">
+        <div class="page-title-row"><div><div class="eyebrow">MAKE PROGRESS</div><h1>Tasks<span class="accent">.</span></h1><p class="subheading">Keep the important things moving.</p></div><button class="button primary" id="addTaskBtn">＋ New task</button></div>
+        <div class="toolbar"><div class="search-box">⌕ <input id="taskSearch" placeholder="Search tasks..."></div><select id="taskFilter" aria-label="Filter tasks"><option value="all">All tasks</option><option value="open">To do</option><option value="done">Completed</option><option value="high">High priority</option></select></div>
+        <div class="panel table-panel"><div class="table-header"><span>TASK</span><span>PRIORITY</span><span>DUE DATE</span><span>STATUS</span><span></span></div><div id="taskRows"></div><div class="empty-state" id="taskEmpty"><div class="empty-icon">☷</div><h3>No tasks here yet</h3><p>Create your first task to start organising your work.</p><button class="button secondary" id="emptyAddTask">＋ Add a task</button></div></div>
+      </section>
+
+      <section class="page" id="page-customers">
+        <div class="page-title-row"><div><div class="eyebrow">BUILD RELATIONSHIPS</div><h1>Customers<span class="accent">.</span></h1><p class="subheading">A simple place to keep track of your contacts.</p></div><button class="button primary" id="addCustomerBtn">＋ Add customer</button></div>
+        <div class="toolbar"><div class="search-box">⌕ <input id="customerSearch" placeholder="Search customers..."></div><span class="muted" id="customerCount"></span></div>
+        <div class="customer-grid" id="customerGrid"></div>
+        <div class="empty-state panel" id="customerEmpty"><div class="empty-icon">♙</div><h3>No customers added</h3><p>Add a contact to start building your customer list.</p><button class="button secondary" id="emptyAddCustomer">＋ Add customer</button></div>
+      </section>
+
+      <section class="page" id="page-notes">
+        <div class="page-title-row"><div><div class="eyebrow">CAPTURE YOUR THINKING</div><h1>Notes<span class="accent">.</span></h1><p class="subheading">Ideas, reminders and useful bits of information.</p></div><button class="button primary" id="addNoteBtn">＋ New note</button></div>
+        <div class="notes-grid" id="notesGrid"></div>
+        <div class="empty-state panel" id="notesEmpty"><div class="empty-icon">▤</div><h3>Your ideas go here</h3><p>Create a note and keep useful information close by.</p><button class="button secondary" id="emptyAddNote">＋ Create a note</button></div>
+      </section>
+
+      <section class="page" id="page-settings">
+        <div class="page-intro"><div class="eyebrow">MAKE ORBIT YOURS</div><h1>Settings<span class="accent">.</span></h1><p class="subheading">Manage your workspace and local data.</p></div>
+        <div class="settings-card panel"><div><h3>Workspace name</h3><p>Choose a name for your workspace.</p></div><form id="workspaceForm"><input id="workspaceName" maxlength="40" value="My workspace"><button class="button primary">Save</button></form></div>
+        <div class="settings-card panel"><div><h3>Your data</h3><p>Your tasks, customers and notes are stored in this browser on this device.</p></div><div class="settings-actions"><button class="button secondary" id="settingsExport">Export backup</button><button class="button danger" id="resetData">Reset all data</button></div></div>
+        <div class="settings-card panel"><div><h3>About this version</h3><p>Orbit AI frontend prototype. The assistant currently uses built-in demo responses. A secure backend and AI API connection are needed for live generative AI.</p></div><span class="version-tag">VERSION 1.0.0</span></div>
+      </section>
+
+      <footer class="footer"><span>✳ orbit<span class="brand-ai">AI</span></span><span>Made for clearer thinking and better work.</span></footer>
+    </main>
+  </div>
+
+  <div class="modal-backdrop" id="modalBackdrop">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-head"><h2 id="modalTitle">Create task</h2><button class="modal-close" id="modalClose" aria-label="Close">×</button></div>
+      <form id="modalForm"><div id="modalFields"></div><div class="modal-actions"><button type="button" class="button secondary" id="modalCancel">Cancel</button><button class="button primary" id="modalSubmit">Save</button></div></form>
+    </div>
+  </div>
+  <div class="toast" id="toast" role="status"></div>
+  <script src="app.js"></script>
+</body>
+</html>

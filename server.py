@@ -1,35 +1,52 @@
 
 import os
-from flask import Flask, request, jsonify
-from flask_cors import CORS
+from pathlib import Path
+
+from flask import Flask, request, jsonify, send_from_directory
 from dotenv import load_dotenv
 from groq import Groq
 
-from pathlib import Path
+BASE_DIR = Path(__file__).resolve().parent
 
-env_path = Path(__file__).resolve().parent / ".env"
-load_dotenv(dotenv_path=env_path, override=True)
+# Load local environment variables without overriding hosted settings
+load_dotenv(BASE_DIR / ".env")
 
 app = Flask(__name__)
-CORS(app)
 
-api_key = os.getenv("GROQ_API_KEY")
-client = Groq(api_key=api_key) if api_key else None
+def get_groq_client():
+    api_key = os.getenv("GROQ_API_KEY")
+    return Groq(api_key=api_key) if api_key else None
+
 
 @app.route("/")
 def home():
-    return jsonify({
-        "message": "Orbit AI is online!",
-        "status": "online"
-    })
+    return send_from_directory(BASE_DIR, "index.html")
+
+
+@app.route("/style.css")
+def styles():
+    return send_from_directory(BASE_DIR, "style.css")
+
+
+@app.route("/app.js")
+def javascript():
+    return send_from_directory(BASE_DIR, "app.js")
+
+
+@app.route("/health")
+def health():
+    return jsonify({"status": "online", "app": "Orbit AI"})
+
 
 @app.route("/chat", methods=["POST"])
 def chat():
-    data = request.get_json() or {}
-    message = data.get("message", "").strip()
+    data = request.get_json(silent=True) or {}
+    message = data.get("message", "")
 
-    if not message:
+    if not isinstance(message, str) or not message.strip():
         return jsonify({"error": "Please enter a message."}), 400
+
+    client = get_groq_client()
 
     if client is None:
         return jsonify({"error": "Groq API key not configured."}), 500
@@ -49,7 +66,7 @@ def chat():
                 },
                 {
                     "role": "user",
-                    "content": message
+                    "content": message.strip()
                 }
             ],
             temperature=0.7,
@@ -68,4 +85,8 @@ def chat():
 
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5002)
+    app.run(
+        host="127.0.0.1",
+        port=5002,
+        debug=False
+    )
